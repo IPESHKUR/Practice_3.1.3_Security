@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Security Example</title>
+</head>
+<body>
+<h1>Welcome spring boot security page!</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Age</th>
+        <th colspan="2">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${admin}">
+        <td th:text="${user.getId()}">Id</td>
+        <td th:text="${user.getName()}">Name</td>
+        <td th:text="${user.getSurname()}">Surname</td>
+        <td th:text="${user.getAge}">Age</td>
+        <td>
+
+            <form th:method="GET" th:action="@{/update}">
+                <input type="hidden" name="id" th:value="${user.id}"/>
+                <button type="submit">Update user</button>
+            </form>
+        </td>
+        <td>
+            <form th:method="POST" th:action="@{/delete/(id=${user.getId()})}">
+                <button type="submit">Delete user</button>
+            </form>
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<input type="button" value="Add user"
+       onclick="window.location.href = 'admin/new'"/>
+
+</body>
+</html>

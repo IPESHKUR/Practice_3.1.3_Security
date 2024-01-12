@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/edit/(id=${user.getId()})}" th:object="${user}">
+    <label for="name">Enter Name: </label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <div th:if="${#fields.hasErrors('name')}"
+         th:each="err : ${#fields.errors('name')}" th:text="${err}" class="error"></div>
+    <br/>
+    <label for="name">Enter Surname: </label>
+    <input type="text" th:field="*{surname}" id="surname"/>
+    <div th:if="${#fields.hasErrors('surname')}"
+         th:each="err : ${#fields.errors('surname')}" th:text="${err}" class="error"></div>
+    <br/>
+    <label for="name">Enter age: </label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <div th:if="${#fields.hasErrors('age')}"
+         th:each="err : ${#fields.errors('age')}" th:text="${err}" class="error"></div>
+    <br/>
+    <input type="submit" value="Done"/>
+
+</form>
+
+</body>
+</html>
