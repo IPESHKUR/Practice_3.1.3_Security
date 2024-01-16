@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,31 +31,39 @@ public class User implements UserDetails {
     @Column
     private Long id;
     @Column
-    @NotEmpty(message = "The name cannot be empty")
-    @Size(min = 2, max = 40, message = "The name can contain from 2 to 40 characters")
     private String name;
     @Column
-    @NotEmpty(message = "The surname cannot be empty")
-    @Size(min = 2, max = 40, message = "The surname can contain from 2 to 40 characters")
     private String surname;
     @Column
-    @NotNull
-    @Min(value = 1, message = "Age must be greater than 0")
     private int age;
+    @Column
+    private String username;
+    @Column
+    private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-    private Set<Role> roles;
+            joinColumns = {@JoinColumn(name = "user_id",referencedColumnName="id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName="id")})
+    private Set<Role> roles = new HashSet<>();
 
-    public User() {
-    }
+    public User() {}
 
-    public User(String name, String surname, int age) {
+    public User(String name, String surname, int age, String username, String password, Set<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.age = age;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public void setId(Long id) {
@@ -89,6 +98,14 @@ public class User implements UserDetails {
         this.surname = surname;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -101,36 +118,36 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return getRoles();
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

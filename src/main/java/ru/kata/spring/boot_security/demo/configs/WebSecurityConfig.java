@@ -20,6 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.successUserHandler = successUserHandler;
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -27,9 +28,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //указывает на какие паттерны(url) имеют доступ -> пермитОлл - имеют доступ все
                 .antMatchers("/", "/index").permitAll()
-                .antMatchers("/", "/users").permitAll()
                 //к методам Гет по url /admin имеет доступ только роль Admin
                 .antMatchers(HttpMethod.GET, "/admin/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/user/**").hasAnyRole("ADMIN","USER")
                 //каждый запрос должен быть аутентифирован
                 .anyRequest().authenticated()
                 .and()
@@ -39,8 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll();
     }
-
-    // аутентификация inMemory
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
@@ -59,4 +58,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return new InMemoryUserDetailsManager(user, admin);
     }
+
+//    @Bean
+//    protected BCryptPasswordEncoder bCryptPasswordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) {
+//        auth.authenticationProvider(daoAuthenticationProvider());
+//    }
+//    @Bean
+//    public DaoAuthenticationProvider daoAuthenticationProvider() {
+//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+//        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
+//        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+//        return daoAuthenticationProvider;
+//    }
+
+
 }

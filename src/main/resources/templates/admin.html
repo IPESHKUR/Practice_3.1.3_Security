@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Spring Security Example</title>
+    <title></title>
 </head>
 <body>
 <h1>Welcome spring boot security page!</h1>
@@ -13,6 +13,8 @@
         <th>Name</th>
         <th>Surname</th>
         <th>Age</th>
+        <th>Username</th>
+        <th>Password</th>
         <th colspan="2">Actions</th>
     </tr>
     </thead>
@@ -22,9 +24,11 @@
         <td th:text="${user.getName()}">Name</td>
         <td th:text="${user.getSurname()}">Surname</td>
         <td th:text="${user.getAge}">Age</td>
+        <td th:text="${user.getUsername}">Username</td>
+        <td th:text="${user.getPassword}">Password</td>
         <td>
 
-            <form th:method="GET" th:action="@{/update}">
+            <form th:method="GET" th:action="@{/admin/update}">
                 <input type="hidden" name="id" th:value="${user.id}"/>
                 <button type="submit">Update user</button>
             </form>
@@ -41,6 +45,7 @@
 <br>
 <input type="button" value="Add user"
        onclick="window.location.href = 'admin/new'"/>
-
+<input type="submit" value="Logout"
+       onclick="window.location.href = 'login'"/>
 </body>
 </html>
