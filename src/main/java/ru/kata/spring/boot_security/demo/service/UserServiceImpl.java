@@ -2,10 +2,12 @@ package ru.kata.spring.boot_security.demo.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.Dao.RoleDao;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService,UserDetailsService {
 
     private final UserDao userDao;
     private final RoleDao roleDao;
@@ -51,12 +53,11 @@ public class UserServiceImpl implements UserService {
         newUser.setName(userDto.getName());
         newUser.setSurname(userDto.getSurname());
         newUser.setAge(userDto.getAge());
-        newUser.setPassword(userDto.getPassword());
         newUser.setUsername(userDto.getUsername());
+        newUser.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
         newUser.setRoles(roles);
 
         userDao.saveUser(newUser);
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
     }
 
     @Override
@@ -69,6 +70,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateUser(User user) {
         userDao.updateUser(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userDao.getUserByUsername(username);
+        if(user == null){
+            throw new UsernameNotFoundException("User not found with this name: " + username);
+        }
+        return user;
     }
 
 //    @Override
