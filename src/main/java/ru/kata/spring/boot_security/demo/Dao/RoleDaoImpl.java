@@ -21,6 +21,5 @@ public class RoleDaoImpl implements RoleDao {
         return new HashSet<>(entityManager.createQuery("FROM Role role WHERE role.name in (:roleNames)")
                 .setParameter("roleNames", roleNames)
                 .getResultList());
-        //new HashSet<>(entityManager.createQuery("FROM Role role WHERE role.name in (:roleNames)").setParameter("roleNames", roleNames).getResultList())
     }
 }

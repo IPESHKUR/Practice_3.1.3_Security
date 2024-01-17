@@ -7,27 +7,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.kata.spring.boot_security.demo.Dao.RoleDaoImpl;
 import ru.kata.spring.boot_security.demo.dto.UserDto;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 @Controller
 public class AdminController {
 
     private final UserService userService;
-    private final RoleDaoImpl roleDao;
 
     @Autowired
-    public AdminController(UserService userService, RoleDaoImpl roleDao) {
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.roleDao = roleDao;
     }
 
     @GetMapping("/admin")
@@ -38,10 +32,7 @@ public class AdminController {
 
     @GetMapping("/admin/new")
     public String addUser(Model model) {
-//        Set<Role> roles = roleDao.getAllRoles();
         model.addAttribute("userDto", new User());
-//        model.addAttribute("roles", roles);
-
         return "add";
     }
 
@@ -50,7 +41,6 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "add";
         }
-
         userService.saveUser(userDto);
         return "redirect:/admin";
     }
@@ -68,7 +58,8 @@ public class AdminController {
     }
 
     @PostMapping("/edit")
-    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @ModelAttribute("id") Long id) {
+    public String updateUser(@ModelAttribute("user") @Valid User user,
+                             BindingResult bindingResult, @ModelAttribute("id") Long id) {
         if (bindingResult.hasErrors()) {
             return "edit";
         }

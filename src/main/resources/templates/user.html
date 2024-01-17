@@ -5,8 +5,36 @@
     <title>Home page</title>
 </head>
 <body>
-<h1>Welcome to Home PAGE!</h1>
+<h1>Welcome to Home PAGE!
+    <br/>
+    Here you can see all the information about yourself!
+</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Age</th>
+        <th>Username</th>
+        <th>Password</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${user}">
+        <td th:text="${user.getId()}">Id</td>
+        <td th:text="${user.getName()}">Name</td>
+        <td th:text="${user.getSurname()}">Surname</td>
+        <td th:text="${user.getAge}">Age</td>
+        <td th:text="${user.getUsername}">Username</td>
+        <td th:text="${user.getPassword}">Password</td>
+    </tbody>
+
+</table>
+<br/>
 <input type="submit" value="Logout"
        onclick="window.location.href = 'login'"/>
+<input type="submit" value="Admin page"
+       onclick="window.location.href = '/admin'"/>
 </body>
 </html>
