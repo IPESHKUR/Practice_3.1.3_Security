@@ -1,11 +1,17 @@
 package ru.kata.spring.boot_security.demo.dto;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserDto {
+    @Id
+    @Column
+    private Long id;
+
     @NotEmpty(message = "The name cannot be empty")
     @Size(min = 2, max = 40, message = "The name can contain from 2 to 40 characters")
     private String name;
@@ -25,6 +31,13 @@ public class UserDto {
 
     public UserDto() {
     }
+    public UserDto(String name, String surname, int age, String username, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+    }
 
     public UserDto(String name, String surname, int age, String username, String password, String[] roles) {
         this.name = name;
@@ -33,6 +46,13 @@ public class UserDto {
         this.username = username;
         this.password = password;
         this.roles = roles;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

@@ -28,6 +28,10 @@ public class Role implements GrantedAuthority {
     private Set<User> users = new HashSet<>();
     public Role() {}
 
+    public Role(String name) {
+        this.name = name;
+    }
+
     public Set<User> getUsers() {
         return users;
     }
@@ -53,5 +57,14 @@ public class Role implements GrantedAuthority {
     public void setId(Long id) {
         this.id = id;
     }
-
+    @Override
+    public String toString() {
+        if (name != null && name.length() != 0 && name.contains("ROLE")) {
+            return name.substring(5);
+        }
+        return name;
+    }
+//    String text = set.toString().replaceAll("(?u)[^\pL ]", "");
 }
+
+

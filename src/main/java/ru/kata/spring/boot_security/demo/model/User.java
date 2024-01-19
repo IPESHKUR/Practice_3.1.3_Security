@@ -38,11 +38,20 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "user_id",referencedColumnName="id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName="id")})
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private Set<Role> roles = new HashSet<>();
 
-    public User() {}
+    public User() {
+    }
+
+    public User(String name, String surname, int age, String username, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+    }
 
     public User(String name, String surname, int age, String username, String password, Set<Role> roles) {
         this.name = name;
@@ -136,6 +145,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
     @Override
     public String toString() {
         return "User{" +
