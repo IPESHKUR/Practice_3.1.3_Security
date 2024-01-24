@@ -4,15 +4,20 @@ import ru.kata.spring.boot_security.demo.dto.UserDto;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     List<User> getAllUsers();
-    User getUserByUsername(String username);
+
+    Optional<User> getUserByUsername(String username);
+
     User getUserById(Long id);
 
     void saveUser(UserDto userDto);
 
     void deleteUsers(Long id);
 
-    void updateUser(User user);
+    void updateUser(UserDto userDto);
+
+    boolean existsByUsername(String username);
 }

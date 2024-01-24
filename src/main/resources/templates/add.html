@@ -5,6 +5,7 @@
     <title></title>
 </head>
 <body>
+<div th:if="${error}" th:text="${error}"></div>
 
 <form th:method="POST" th:action="@{/add}" th:object="${userDto}">
     <label for="name">Enter Name: </label>
@@ -12,21 +13,25 @@
     <div th:if="${#fields.hasErrors('name')}"
          th:each="err : ${#fields.errors('name')}" th:text="${err}" class="error"></div>
     <br/>
+
     <label for="name">Enter Surname: </label>
     <input type="text" th:field="*{surname}" id="surname"/>
     <div th:if="${#fields.hasErrors('surname')}"
          th:each="err : ${#fields.errors('surname')}" th:text="${err}" class="error"></div>
     <br/>
+
     <label for="name">Enter age: </label>
     <input type="text" th:field="*{age}" id="age"/>
     <div th:if="${#fields.hasErrors('age')}"
          th:each="err : ${#fields.errors('age')}" th:text="${err}" class="error"></div>
     <br/>
+
     <label for="name">Enter username: </label>
     <input type="text" th:field="*{username}" id="username"/>
     <div th:if="${#fields.hasErrors('username')}"
          th:each="err : ${#fields.errors('username')}" th:text="${err}" class="error"></div>
     <br/>
+
         <label for="name">Enter password: </label>
         <input type="text" th:field="*{password}" id="password"/>
         <div th:if="${#fields.hasErrors('password')}"

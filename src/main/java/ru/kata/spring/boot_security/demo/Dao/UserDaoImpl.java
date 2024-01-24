@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.Dao;
+package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -8,6 +8,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -15,12 +16,24 @@ public class UserDaoImpl implements UserDao {
     private EntityManager entityManager;
 
     @Override
-    public User getUserByUsername(String username) {
+    public Optional<User> getUserByUsername(String username) {
         TypedQuery<User> query = entityManager
                 .createQuery("FROM User user LEFT JOIN FETCH user.roles WHERE user.username =:username", User.class)
                 .setParameter("username", username);
-        User user = query.getSingleResult();
-        return user;
+        return query.getResultList().stream().findFirst();
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        TypedQuery<User> query = entityManager
+                .createQuery("FROM User WHERE username = :username", User.class)
+                .setParameter("username", username);
+        return !query.getResultList().isEmpty();
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return entityManager.createQuery("from User", User.class).getResultList();
     }
 
     @Override
@@ -30,16 +43,6 @@ public class UserDaoImpl implements UserDao {
             throw new EntityNotFoundException("User with this ID not found");
         }
         return user;
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return entityManager.createQuery("from User", User.class).getResultList();
-    }
-
-    @Override
-    public void saveUser(User user) {
-        entityManager.persist(user);
     }
 
     @Override
@@ -53,10 +56,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void updateUser(User user) {
-        User userFromDB = entityManager.find(User.class, user.getId());
-        if (userFromDB == null) {
-            throw new EntityNotFoundException("It is not possible to update this user");
-        }
         entityManager.merge(user);
     }
+
+    @Override
+    public void saveUser(User user) {
+        if (!existsByUsername(user.getUsername())) {
+            entityManager.persist(user);
+        }
+    }
+
 }
