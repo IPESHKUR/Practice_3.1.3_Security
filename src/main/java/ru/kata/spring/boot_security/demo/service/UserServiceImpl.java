@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.RoleDao;
+import ru.kata.spring.boot_security.demo.dao.RoleDaoImpl;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.dto.UserDto;
 import ru.kata.spring.boot_security.demo.model.Role;
@@ -11,8 +12,10 @@ import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,8 +40,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserByUsername(String username) {
+    public User getUserByUsername(String username) {
+        User user = null;
+        try {
+            user = userDao.getUserByUsername(username);
+        } catch (NoSuchElementException e) {
+            return new User();
+        }
         return userDao.getUserByUsername(username);
+    }
+
+    public boolean uniqueUsername (String username) {
+        return userDao.existsByUsername(username);
     }
 
     @Override

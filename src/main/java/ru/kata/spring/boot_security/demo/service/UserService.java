@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UserService {
     List<User> getAllUsers();
 
-    Optional<User> getUserByUsername(String username);
+    User getUserByUsername(String username);
 
     User getUserById(Long id);
 
@@ -20,4 +20,5 @@ public interface UserService {
     void updateUser(UserDto userDto);
 
     boolean existsByUsername(String username);
+    boolean uniqueUsername (String username);
 }

@@ -21,11 +21,11 @@ public class UserSecurity implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userService.getUserByUsername(username);
-        if (user.isEmpty()) {
+        User user = userService.getUserByUsername(username);
+        if (user == null) {
             throw new UsernameNotFoundException("User not found with this name: " + username);
         }
-        return user.get();
+        return user;
     }
 
 }

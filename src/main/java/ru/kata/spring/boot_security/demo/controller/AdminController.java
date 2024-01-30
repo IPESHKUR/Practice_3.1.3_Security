@@ -13,7 +13,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 public class AdminController {
@@ -64,8 +63,8 @@ public class AdminController {
 
     @PostMapping("/edit")
     public String updateUser(@ModelAttribute("user") @Valid UserDto userDto, BindingResult bindingResult) {
-        Optional<User> userByUsername = userService.getUserByUsername(userDto.getUsername());
-        if (userByUsername.isPresent() && !userByUsername.get().getId().equals(userDto.getId())) {
+        User userByUsername = userService.getUserByUsername(userDto.getUsername());
+        if (userService.uniqueUsername(userDto.getUsername()) && !userByUsername.getId().equals(userDto.getId())) {
             bindingResult.rejectValue("username",
                     "Username already exists", "Username already exists");
         }
@@ -77,3 +76,9 @@ public class AdminController {
     }
 
 }
+
+
+
+
+//        userService.existsByUsername(userByUsername.getUsername())
+//        userByUsername.isPresent && !userByUsername.getId().equals(userDto.getId())
