@@ -8,7 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -16,11 +15,11 @@ public class UserDaoImpl implements UserDao {
     private EntityManager entityManager;
 
     @Override
-    public Optional<User> getUserByUsername(String username) {
+    public User getUserByUsername(String username) {
         TypedQuery<User> query = entityManager
                 .createQuery("FROM User user LEFT JOIN FETCH user.roles WHERE user.username =:username", User.class)
                 .setParameter("username", username);
-        return query.getResultList().stream().findFirst();
+        return query.getResultList().stream().findFirst().orElseThrow();
     }
 
     @Override
@@ -48,6 +47,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void deleteUsers(Long id) {
         User user = entityManager.find(User.class, id);
+
         if (user == null) {
             throw new EntityNotFoundException("It is not possible to delete a user with this ID");
         }
